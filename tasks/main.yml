@@ -1,0 +1,46 @@
+---
+# tasks file for idm
+# - name: Subscription Manager setup
+#   redhat_subscription:
+#     state: present
+#     username: "{{ rhsm_user }}"
+#     password: "{{ rhsm_passwd }}"
+#     # pool: '^Red Hat Satelite Employee Subscription'
+#     # pool_ids: "8a85f9815ad3324a015ad3b091a7472b"
+#     # pool: '^Employee SKU'
+#     pool_ids: "8a85f98460bfb0470160c2ff250f3e66"
+#     # auto_attach: true
+#     # force_register: true
+#   tags:
+#     - idm
+#     - subscription
+
+- name: Setup Red Hat Repos
+  rhsm_repository:
+    name:
+      - rhel-7-server-rpms
+      - rhel-7-server-optional-rpms
+      - rhel-7-server-extras-rpms
+      - rhel-server-rhscl-7-rpms
+      - rhel-7-server-ansible-2.6-rpms
+    state: enabled
+    purge: yes
+  tags:
+    - idm
+    - repos
+
+- name: Install Identity Management RPM
+  package:
+    name: ipa-server
+    state: present
+  tags:
+    - idm
+    - rpms
+
+- name: Install Identity Management DNS RPM
+  package:
+    name: ipa-server-dns
+    state: present
+  tags:
+    - idm
+    - rpms
